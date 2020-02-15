@@ -3,7 +3,8 @@ Tracker
 **********************************************************************************************
 2.12 2020: initial
 2.13 2020: prepare work for doing LEGO
-2.14 2020: finish LEGO                                              ->RunWu
+2.14 2020: finish LEGO                                              
+2.15 2020：make board thinner and coins bigger                       ->RunWu
 ...
 
 **********************************************************************************************
@@ -11,7 +12,8 @@ Tips
 **********************************************************************************************
 There are some color meterial in "/Asset/Meterial"
 There are two player prefeb in "/Asset/Player"
-"Scripts" folder alread there                                       ->RunWu
+Comment out some of the scripts
+"Scripts" folder already there                                      ->RunWu
 ...
 
 **********************************************************************************************

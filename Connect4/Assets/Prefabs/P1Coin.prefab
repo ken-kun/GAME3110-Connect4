@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2296853590376671064}
   - component: {fileID: 4070187894780832794}
   - component: {fileID: 5368167377558466681}
-  - component: {fileID: 1990882142864312016}
   - component: {fileID: 5965028682250070992}
   - component: {fileID: 8528321912567207465}
+  - component: {fileID: 359184838032271234}
   m_Layer: 0
   m_Name: P1Coin
   m_TagString: Untagged
@@ -29,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6527474267439646171}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -6.32, y: 11.01, z: 0.04}
-  m_LocalScale: {x: 0.99, y: 0.05, z: 0.99}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 0.05, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -82,20 +82,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &1990882142864312016
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6527474267439646171}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &5965028682250070992
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -126,3 +112,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_iCoinParent: 0
   m_rb: {fileID: 0}
+--- !u!135 &359184838032271234
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6527474267439646171}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

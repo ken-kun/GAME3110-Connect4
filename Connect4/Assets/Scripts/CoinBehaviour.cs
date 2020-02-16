@@ -1,8 +1,8 @@
 ﻿/***************************************************************
  * Coin Behaviour Script
  * By Hercules (HErC) Dias Campos (ID 101091070)
- * Created on February 19, 2020
- * Last Modified on February 20, 2020
+ * Created:         February 15, 2020
+ * Last Modified:   February 15, 2020
  * 
  * Behaviour implemented to control Coin Physics
  * Also tracks who the parent was (needed for win/loss condition
@@ -19,6 +19,7 @@ using UnityEngine;
 public class CoinBehaviour : MonoBehaviour
 {
     [SerializeField] private uint m_iCoinParent;
+    public uint ParentId { get { return m_iCoinParent; } }
 
     public Rigidbody m_rb;
 

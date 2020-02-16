@@ -22,7 +22,10 @@ public class BoardManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] m_players;
     //Not the preferred implementation, but this'll have to do
-    [SerializeField] private PlayerBehaviour[] m_Behaviours; 
+    [SerializeField] private PlayerBehaviour[] m_Behaviours;
+    [SerializeField] GameObject m_detectorTemplate;
+    //Will have to work on flattened array
+    [SerializeField] private GameObject[] m_detectors;
     private uint currentPlayerTurn;
     private bool gameWon;
 
@@ -36,6 +39,19 @@ public class BoardManager : MonoBehaviour
         currentPlayerTurn = 0;
         
         gameWon = false;
+        //1. This is semi-hardcoded. I don't like it, but well...
+        //2. Row height changes only when row is done; therefore,
+        //   the x loop (row filler) has to be nested inside the y loop
+        //3. This creates the rows FROM LEFT TO RIGHT, BOTTOM TO TOP
+        for (int y = 0; y < 6; ++y) {
+            for (int x = 0; x < 7; ++x) {
+                Vector3 detectorPosition = new Vector3(-2.75f + (float)x, 1.0f + (float)y, 0.0f);
+                m_detectors[x + (x * y)] = GameObject.Instantiate( m_detectorTemplate, 
+                            this.gameObject.transform.position + detectorPosition,
+                            this.gameObject.transform.rotation, 
+                            this.gameObject.transform);
+            }
+        }
     }
 
     // Start is called before the first frame update
@@ -51,11 +67,16 @@ public class BoardManager : MonoBehaviour
     }
 
     public void OnEndTurn(uint playerID) {
-        m_Behaviours[playerID].SetTurn(false);
+        foreach (PlayerBehaviour behaviour in m_Behaviours) {
+            behaviour.SetTurn(false);
+            behaviour.enabled = false;
+        }
         if (playerID == 0) {
+            m_Behaviours[1].enabled = true;
             m_Behaviours[1].SetTurn(true);
         }
         else {
+            m_Behaviours[0].enabled = true;
             m_Behaviours[0].SetTurn(true);
         }
         

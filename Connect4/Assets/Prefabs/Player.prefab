@@ -43,5 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e67c801781134594f8bcede5c436b370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_coinTemplate: {fileID: 6527474267439646171, guid: 20b0ce1be3092634ab9992d56144e878,
-    type: 3}
+  m_coinTemplate: {fileID: 0}
+  m_iPlayerId: 0
+  m_iCurrentSlot: 0

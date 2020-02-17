@@ -9,9 +9,9 @@
  * 
  *  ***ALWAYS BEGINS WITH P1***
  *  ***WILL REQUIRE REFINEMENT***
+ *  **Consider turning this into a Singleton**
  *  
- *  TODO: Check whether deactivating the player's scripts
- *          works better as an alternative to turns
+ *  TODO: Implement "Reset" method
  * 
  **************************************************************/
 using System.Collections;
@@ -31,7 +31,8 @@ public class BoardManager : MonoBehaviour
     public uint MaxSlot { get { return m_iMaxSlot; } }
 
     //Player-related variables
-    [SerializeField] private GameObject[] m_players;
+    [SerializeField] private GameObject[] m_playerPrefab; //prefab
+    [SerializeField] private GameObject[] m_players; //for visualization purposes only
     //Not the preferred implementation, but this'll have to do
     [SerializeField] private PlayerBehaviour[] m_Behaviours;
 
@@ -82,7 +83,8 @@ public class BoardManager : MonoBehaviour
         }
 
         for (uint i = 0; i < m_players.Length; ++i) {
-            m_players[i].transform.parent = this.gameObject.transform;
+            m_players[i] = GameObject.Instantiate(m_playerPrefab[i], this.gameObject.transform);
+            //m_players[i].transform.parent = this.gameObject.transform;
             m_Behaviours[i] = m_players[i].GetComponent<PlayerBehaviour>();
             m_Behaviours[i].SetTurn(false);
             m_Behaviours[i].SetPlayerId(i);
@@ -130,7 +132,9 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        if (CheckWin()) {
+        gameWon = CheckWin();
+
+        if (gameWon) {
             string message = currentPlayerTurn == 0 ? "Player A" : "Player B";
             m_canvasManager.UpdateSetText(message);
         }
@@ -169,31 +173,27 @@ public class BoardManager : MonoBehaviour
             for (int i = 0; i < 38; ++i) { //for number of relevant slots
                 if (i < 21) {
                     if (VictoryChecker.CheckVerticalWin(p, i, m_detectors)) {
-                        gameWon = true;
-                        return gameWon;
+                        return true;
                     }
                     
                     if (i % 7 < 4) {
                         if (VictoryChecker.CheckUpRightWin(p, i, m_detectors)) {
-                            gameWon = true;
-                            return gameWon;
+                            return true;
                         }
                     }
                     if (i % 7 > 2) {
                         if (VictoryChecker.CheckUpLeftWin(p, i, m_detectors)) {
-                            gameWon = true;
-                            return gameWon;
+                            return true;
                         }
                     }
                 }
                 if (i % 7 < 4) {
-                    VictoryChecker.CheckHorizontalWin(p, i, m_detectors);
-                    if (gameWon) {
-                        return gameWon;
+                    if(VictoryChecker.CheckHorizontalWin(p, i, m_detectors)) {
+                        return true;
                     }
                 }
             }
         }
-        return gameWon;
+        return false;
     }
 }

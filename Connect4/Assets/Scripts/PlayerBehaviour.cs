@@ -64,7 +64,7 @@ public class PlayerBehaviour : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.LeftArrow)) {
 
-                m_iCurrentSlot = m_iCurrentSlot == 0 ? 7 : --m_iCurrentSlot;
+                m_iCurrentSlot = m_iCurrentSlot == 0 ? 6 : --m_iCurrentSlot;
 
                 this.gameObject.transform.position = m_boardManager.GetSlotPosition(m_iCurrentSlot);
             }

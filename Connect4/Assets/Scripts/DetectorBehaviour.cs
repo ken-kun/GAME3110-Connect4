@@ -2,7 +2,7 @@
  * Detector Script
  * By Hercules (HErC) Dias Campos (ID 101091070)
  * Created:         February 16, 2020
- * Last Modified:   February 16, 2020
+ * Last Modified:   February 17, 2020
  * 
  * Slot Detector class
  * Responsible for telling if a coin is currently in its slot,

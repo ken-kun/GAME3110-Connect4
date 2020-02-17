@@ -15,6 +15,7 @@ using UnityEngine;
 
 public static class VictoryChecker
 {
+    private static Color m_WinColor = new Color(1.0f, 1.0f, 0.0f);
     public static bool CheckHorizontalWin(int playerId, int index, GameObject[] grid) {
 
         if (grid[index].GetComponent<DetectorBehaviour>().OwnerId   == playerId &&

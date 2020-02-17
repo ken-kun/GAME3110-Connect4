@@ -2,7 +2,7 @@
  * Player Behaviour Script
  * By Hercules (HErC) Dias Campos (101091070)
  * Created:         February 15, 2020
- * Last Modified:   February 15, 2020
+ * Last Modified:   February 17, 2020
  * 
  * Class implemented basically to control player input
  * As it is, it's not suitable for the proposed gameplay

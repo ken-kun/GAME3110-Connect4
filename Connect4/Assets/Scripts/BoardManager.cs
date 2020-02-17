@@ -2,7 +2,7 @@
  * Board Manager Script
  * By Hercules (HErC) Dias Campos (ID 101091070)
  * Created:         February 16, 2020
- * Last Modified:   February 16, 2020
+ * Last Modified:   February 17, 2020
  * 
  * Board (level) manager class
  * Responsible for instantiating players and managing turns
@@ -45,6 +45,9 @@ public class BoardManager : MonoBehaviour
     private bool gameWon;
     public bool GameOver { get { return gameWon; } }
 
+    //UI Variables
+    private LevelCanvasManager m_canvasManager;
+
     void Awake() {
         
         currentPlayerTurn = 0;
@@ -86,13 +89,19 @@ public class BoardManager : MonoBehaviour
             m_Behaviours[i].SetPlayerSlot(i*6);
             m_Behaviours[i].transform.position = GetSlotPosition(i * 6);
         }
+
+        m_canvasManager = GameObject.Find("Canvas").GetComponent<LevelCanvasManager>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        if (!m_canvasManager) {
+            m_canvasManager = GameObject.Find("Canvas").GetComponent<LevelCanvasManager>();
+        }
         //TODO: Randomize
         m_Behaviours[0].SetTurn(true);
+        m_canvasManager.UpdateTurnText("Player A");
     }
 
     // Update is called once per frame
@@ -121,18 +130,23 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        CheckWin();
+        if (CheckWin()) {
+            string message = currentPlayerTurn == 0 ? "Player A" : "Player B";
+            m_canvasManager.UpdateSetText(message);
+        }
 
         if (!gameWon) {
             if (playerID == 0) {
                 currentPlayerTurn = 1;
                 m_Behaviours[1].enabled = true;
                 m_Behaviours[1].SetTurn(true);
+                m_canvasManager.UpdateTurnText("Player B");
             }
             else {
                 currentPlayerTurn = 0;
                 m_Behaviours[0].enabled = true;
                 m_Behaviours[0].SetTurn(true);
+                m_canvasManager.UpdateTurnText("Player A");
             }
         }
     }
@@ -154,30 +168,30 @@ public class BoardManager : MonoBehaviour
         for (int p = 0; p < 2; ++p) { //for number of players
             for (int i = 0; i < 38; ++i) { //for number of relevant slots
                 if (i < 21) {
-                    gameWon = VictoryChecker.CheckVerticalWin(p, i, m_detectors);
+                    if (VictoryChecker.CheckVerticalWin(p, i, m_detectors)) {
+                        gameWon = true;
+                        return gameWon;
+                    }
+                    
                     if (i % 7 < 4) {
-                        gameWon = VictoryChecker.CheckUpRightWin(p, i, m_detectors);
+                        if (VictoryChecker.CheckUpRightWin(p, i, m_detectors)) {
+                            gameWon = true;
+                            return gameWon;
+                        }
                     }
                     if (i % 7 > 2) {
-                        gameWon = VictoryChecker.CheckUpLeftWin(p, i, m_detectors);
-                    }
-
-                    if (gameWon) {
-                        break;
+                        if (VictoryChecker.CheckUpLeftWin(p, i, m_detectors)) {
+                            gameWon = true;
+                            return gameWon;
+                        }
                     }
                 }
                 if (i % 7 < 4) {
                     VictoryChecker.CheckHorizontalWin(p, i, m_detectors);
                     if (gameWon) {
-                        break;
+                        return gameWon;
                     }
                 }
-                if (gameWon) {
-                    break;
-                }
-            }
-            if (gameWon) {
-                break;
             }
         }
         return gameWon;

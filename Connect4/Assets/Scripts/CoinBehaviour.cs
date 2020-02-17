@@ -26,15 +26,8 @@ public class CoinBehaviour : MonoBehaviour
     void Awake() {
 
         m_rb = this.gameObject.GetComponent<Rigidbody>();
-
-        if (m_rb){
-
-            m_rb.constraints = RigidbodyConstraints.FreezeAll;
-        }
-        else {
-
-            Debug.Log("Where's my Rigidbody???");
-        }
+        m_rb.constraints = RigidbodyConstraints.FreezeAll;
+        
     }
 
     public void SetPlayerOwner(uint playerID) {
@@ -43,6 +36,7 @@ public class CoinBehaviour : MonoBehaviour
 
     public void OnDetach() {
 
+        this.gameObject.GetComponent<SphereCollider>().enabled = true;
         this.gameObject.transform.parent = null;
         m_rb.constraints = RigidbodyConstraints.None;
         m_rb.constraints = RigidbodyConstraints.FreezeRotation  | 

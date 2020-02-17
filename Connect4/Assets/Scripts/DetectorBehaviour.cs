@@ -16,25 +16,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SphereCollider))]
+//[RequireComponent(typeof(SphereCollider))]
+//Will keep the collider as is for now to aid visualization
 public class DetectorBehaviour : MonoBehaviour
 {
-    private int m_iOwnerId;
+    //SERIALIZED FOR VISUALIZATION PURPOSES ONLY
+    [SerializeField] private int m_iOwnerId; 
+    public int OwnerId { get { return m_iOwnerId; } }
+    //SERIALIZED FOR VISUALIZATION PURPOSES ONLY
+    [SerializeField] private bool m_bHasOwner;
+    public bool HasOwner { get { return m_bHasOwner; } }
 
     void Awake() {
         m_iOwnerId = -1;
     }
 
+    public bool SetOwner(int OwnerID) {
+        if (m_iOwnerId < 0) {
+            m_iOwnerId = OwnerID;
+            m_bHasOwner = true;
+        }
+        return m_bHasOwner;
+    }
+
+    //Remnants of an old physics system...
+    /*
     void OnTriggerEnter(Collider other) {
         CoinBehaviour coin = other.gameObject.GetComponent<CoinBehaviour>();
         if (coin) {
             m_iOwnerId = (int)coin.ParentId;
         }
-        Debug.Log("Coin Entered...");
     }
 
     void OnTriggerExit(Collider other) {
         m_iOwnerId = -1;
-        Debug.Log("Coin Exited...");
-    }
+    }*/
 }

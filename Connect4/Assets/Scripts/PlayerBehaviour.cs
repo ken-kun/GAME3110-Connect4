@@ -24,12 +24,15 @@ public class PlayerBehaviour : MonoBehaviour
 {
     [SerializeField] private GameObject m_coinTemplate;
     private GameObject m_coin;
-    [SerializeField] private uint m_iPlayerNumber;
+    [SerializeField] private uint m_iPlayerId;
+    [SerializeField] private uint m_iPlayerSlot;
+    public uint CurrentPlayerSlot { get { return m_iPlayerSlot; } }
     [SerializeField] private float m_fClampMin;
     [SerializeField] private float m_fClampMax;
 
     private BoardManager m_boardManager;
-    public bool m_bIsTurn;
+    private bool m_bIsTurn;
+    public bool IsTurn { get { return m_bIsTurn; } }
 
     void Awake() {
 
@@ -59,10 +62,15 @@ public class PlayerBehaviour : MonoBehaviour
                 this.gameObject.transform.Translate(Vector3.right * -1);
             }
         }
+        else {
+            if (m_coin) {
+                ClearCoin();
+            }
+        }
     }
 
     public void SetPlayerId(uint id) {
-        m_iPlayerNumber = id;
+        m_iPlayerId = id;
     }
 
     public void SetTurn(bool turn) {
@@ -77,13 +85,18 @@ public class PlayerBehaviour : MonoBehaviour
 
         m_coin.GetComponent<CoinBehaviour>().OnDetach();
         m_coin = null;
-        m_boardManager.OnEndTurn(m_iPlayerNumber);
+        m_boardManager.OnEndTurn(m_iPlayerNumber, m_iPlayerSlot);
         //Send Message to server, informing that the player made a move
     }
 
-    public void CreateCoin() {
+    private void CreateCoin() {
 
         m_coin = GameObject.Instantiate(m_coinTemplate, this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);
-        m_coin.GetComponent<CoinBehaviour>().SetPlayerOwner(m_iPlayerNumber);
+        m_coin.GetComponent<CoinBehaviour>().SetPlayerOwner(m_iPlayerId);
+        m_coin.GetComponent<SphereCollider>().enabled = false;
+    }
+
+    private void ClearCoin() {
+        Destroy(m_coin);
     }
 }

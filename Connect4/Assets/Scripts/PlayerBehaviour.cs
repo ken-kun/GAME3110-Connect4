@@ -25,10 +25,8 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private GameObject m_coinTemplate;
     private GameObject m_coin;
     [SerializeField] private uint m_iPlayerId;
-    [SerializeField] private uint m_iPlayerSlot;
-    public uint CurrentPlayerSlot { get { return m_iPlayerSlot; } }
-    [SerializeField] private float m_fClampMin;
-    [SerializeField] private float m_fClampMax;
+    [SerializeField] private uint m_iCurrentSlot;
+    public uint CurrentPlayerSlot { get { return m_iCurrentSlot; } }
 
     private BoardManager m_boardManager;
     private bool m_bIsTurn;
@@ -37,6 +35,8 @@ public class PlayerBehaviour : MonoBehaviour
     void Awake() {
 
         m_boardManager =  this.gameObject.transform.parent.gameObject.GetComponent<BoardManager>();
+        //The board is doing this for us...
+        //this.gameObject.transform.position = m_boardManager.GetSlotPosition();
         m_bIsTurn = false;
     }
 
@@ -51,15 +51,22 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (m_bIsTurn) {
 
-            if (Input.GetKeyDown(KeyCode.Space)) { ReleaseCoin(); }
+            //this should prevent players from stacking coins over the top of the board
+            if (Input.GetKeyDown(KeyCode.Space) && !m_boardManager.IsSlotFull(m_iCurrentSlot)) { ReleaseCoin(); }
 
-            if (Input.GetKeyDown(KeyCode.RightArrow) && this.gameObject.transform.position.x < m_fClampMax) {
+            //implemented wraparound
+            if (Input.GetKeyDown(KeyCode.RightArrow)) {
 
-                this.gameObject.transform.Translate(Vector3.right);
+                ++m_iCurrentSlot;
+                m_iCurrentSlot %= 7;
+
+                this.gameObject.transform.position = m_boardManager.GetSlotPosition(m_iCurrentSlot);
             }
-            if (Input.GetKeyDown(KeyCode.LeftArrow) && this.gameObject.transform.position.x > m_fClampMin) {
+            if (Input.GetKeyDown(KeyCode.LeftArrow)) {
 
-                this.gameObject.transform.Translate(Vector3.right * -1);
+                m_iCurrentSlot = m_iCurrentSlot == 0 ? 7 : --m_iCurrentSlot;
+
+                this.gameObject.transform.position = m_boardManager.GetSlotPosition(m_iCurrentSlot);
             }
         }
         else {
@@ -67,6 +74,11 @@ public class PlayerBehaviour : MonoBehaviour
                 ClearCoin();
             }
         }
+    }
+
+    public void SetPlayerSlot(uint slot) {
+
+        m_iCurrentSlot = slot % 7; //wraparound
     }
 
     public void SetPlayerId(uint id) {
@@ -82,11 +94,12 @@ public class PlayerBehaviour : MonoBehaviour
     }
 
     void ReleaseCoin() {
-
-        m_coin.GetComponent<CoinBehaviour>().OnDetach();
-        m_coin = null;
-        m_boardManager.OnEndTurn(m_iPlayerNumber, m_iPlayerSlot);
-        //Send Message to server, informing that the player made a move
+        if (m_coin) {
+            m_coin.GetComponent<CoinBehaviour>().OnDetach();
+            m_coin = null;
+            m_boardManager.OnEndTurn(m_iPlayerId, m_iCurrentSlot);
+            //Send Message to server, informing that the player made a move
+        }
     }
 
     private void CreateCoin() {

@@ -24,7 +24,6 @@ public static class VictoryChecker
             Debug.Log("Player " + playerId + " wins with match from index" + index + " to index " + (index+3));
             return true;
         }
-
         return false;
     }
 
@@ -53,7 +52,7 @@ public static class VictoryChecker
         return false;
     }
 
-    public static bool CheckIUpLeftWin(int playerId, int index, GameObject[] grid) {
+    public static bool CheckUpLeftWin(int playerId, int index, GameObject[] grid) {
 
         if (grid[index].GetComponent<DetectorBehaviour>().OwnerId      == playerId &&
             grid[index +  6].GetComponent<DetectorBehaviour>().OwnerId == playerId &&

@@ -29,6 +29,7 @@ public class DetectorBehaviour : MonoBehaviour
 
     void Awake() {
         m_iOwnerId = -1;
+        m_bHasOwner = false;
     }
 
     public bool SetOwner(int OwnerID) {

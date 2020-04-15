@@ -49,30 +49,23 @@ public class PlayerBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_bIsTurn) {
-
-            //this should prevent players from stacking coins over the top of the board
-            if (Input.GetKeyDown(KeyCode.Space) && !m_boardManager.IsSlotFull(m_iCurrentSlot)) { ReleaseCoin(); }
-
-            //implemented wraparound
-            if (Input.GetKeyDown(KeyCode.RightArrow)) {
-
-                ++m_iCurrentSlot;
-                m_iCurrentSlot %= 7;
-
-                this.gameObject.transform.position = m_boardManager.GetSlotPosition(m_iCurrentSlot);
-            }
-            if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-
-                m_iCurrentSlot = m_iCurrentSlot == 0 ? 6 : --m_iCurrentSlot;
-
-                this.gameObject.transform.position = m_boardManager.GetSlotPosition(m_iCurrentSlot);
-            }
+        if (!m_bIsTurn) {
+            if (m_coin) { ClearCoin(); }
+            return;
         }
-        else {
-            if (m_coin) {
-                ClearCoin();
-            }
+        //this should prevent players from stacking coins over the top of the board
+        if (Input.GetKeyDown(KeyCode.Space) && !m_boardManager.IsSlotFull(m_iCurrentSlot)) { ReleaseCoin(); }
+
+        //implemented wraparound
+        if (Input.GetKeyDown(KeyCode.RightArrow)) {
+            ++m_iCurrentSlot;
+            m_iCurrentSlot %= 7;
+            this.gameObject.transform.position = m_boardManager.GetSlotPosition(m_iCurrentSlot);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+            m_iCurrentSlot = m_iCurrentSlot == 0 ? 6 : --m_iCurrentSlot;
+            this.gameObject.transform.position = m_boardManager.GetSlotPosition(m_iCurrentSlot);
         }
     }
 

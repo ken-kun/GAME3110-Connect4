@@ -23,33 +23,16 @@ public class DetectorBehaviour : MonoBehaviour
     //SERIALIZED FOR VISUALIZATION PURPOSES ONLY
     [SerializeField] private int m_iOwnerId; 
     public int OwnerId { get { return m_iOwnerId; } }
-    //SERIALIZED FOR VISUALIZATION PURPOSES ONLY
-    [SerializeField] private bool m_bHasOwner;
-    public bool HasOwner { get { return m_bHasOwner; } }
+    public bool HasOwner { get { return m_iOwnerId != -1; } }
 
     void Awake() {
         m_iOwnerId = -1;
-        m_bHasOwner = false;
     }
 
-    public bool SetOwner(int OwnerID) {
+    public bool SetOwner(int ID) {
         if (m_iOwnerId < 0) {
-            m_iOwnerId = OwnerID;
-            m_bHasOwner = true;
+            m_iOwnerId = ID;
         }
-        return m_bHasOwner;
+        return HasOwner;
     }
-
-    //Remnants of an old physics system...
-    /*
-    void OnTriggerEnter(Collider other) {
-        CoinBehaviour coin = other.gameObject.GetComponent<CoinBehaviour>();
-        if (coin) {
-            m_iOwnerId = (int)coin.ParentId;
-        }
-    }
-
-    void OnTriggerExit(Collider other) {
-        m_iOwnerId = -1;
-    }*/
 }

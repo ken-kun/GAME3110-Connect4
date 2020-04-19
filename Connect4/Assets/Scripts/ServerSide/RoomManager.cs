@@ -19,39 +19,86 @@ using C4NO;
 
 public class RoomManager : MonoBehaviour
 {
-    public C4NO.NetworkPlayer[] m_players;
-    public bool IsEmpty { get { return m_players[0] == null && m_players[1] == null; } }
-    public bool HasRoom { get { return m_players[0] == null ^ m_players[1] == null; } }
-    public bool IsFull { get { return m_players[0] != null && m_players[1] != null; } }
-    
+    private ServerScript m_serverScript; //needed for message exchange
+
+    //Room attributes
+    public string[] m_players; //has to be public so server knows. 
+                               //   Will it use player names or ids?
+    public int roomID;
+    public int m_numPlayers;
+    public int Capacity { get; private set; }
+    public bool IsEmpty => m_numPlayers == 0;
+    public bool HasRoom => m_numPlayers < Capacity;
+    public bool IsFull => m_numPlayers == Capacity;
+
+    //Game Attributes
+    private bool m_bMatchStarted;
+    private bool m_bGameSet;
+    private int m_CurrentPlayerTurn; //player index
+
+    //Board Attributes
+    private int[] m_slots;
+
     private void Awake()
     {
-        m_players = new C4NO.NetworkPlayer[2];
-    }
+        //gets reference to server to be able to send messages
+        m_serverScript = this.gameObject.GetComponent<ServerScript>();
 
+        //sets room and players
+        Capacity = 2;
+        m_numPlayers = 0;
+        m_bMatchStarted = false;
+        m_bGameSet = false;
+        m_players = new string[2];
+        m_CurrentPlayerTurn = -1; //initialized to -1 for safety purposes
+
+        //Board setup
+        m_slots = new int[42];
+        for (int i = 0; i < m_slots.Length; ++i) {
+            m_slots[i] = -1;
+        }
+    }
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         
     }
-
     // Update is called once per frame
     void Update()
     {
-        
+        if (IsFull && !m_bMatchStarted) {
+            StartMatch();
+        }
     }
+    void StartMatch() {
 
-    bool AddPlayer(C4NO.NetworkPlayer player) {
-        if (m_players[0] == null)
-        {
+        m_CurrentPlayerTurn = Mathf.RoundToInt(Random.value);
+        //send server update with match started
+        m_bMatchStarted = true;
+        UpdateTurn();
+    }
+    void UpdateBoard() {
+        //for now, just sends the board's current state via server
+    }
+    void UpdateTurn() {
+        if (m_CurrentPlayerTurn == 0) {
+            //Send Update Turn message via server
+        }
+    }
+    public int AddPlayer(string player) {
+        if (m_players[0] == null) {
             m_players[0] = player;
-            return true;
+            m_numPlayers++;
+            return roomID;
         }
         else if (m_players[1] == null) {
             m_players[1] = player;
-            return true;
+            m_numPlayers++;
+            return roomID;
         }
         //it will be a full room
-        return false;
+        return -1;
+    }
+    public bool SlotAvailable(int slot) {
+        return m_slots[slot+35] == -1;
     }
 }

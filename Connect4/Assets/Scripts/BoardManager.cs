@@ -24,11 +24,11 @@ public class BoardManager : MonoBehaviour
     //Serialization for visualization
     private Vector3[] m_vTopSlots;
 
-    private uint m_iMinSlot;
-    public uint MinSlot { get { return m_iMinSlot; } }
+    private int m_iMinSlot;
+    public int MinSlot { get { return m_iMinSlot; } }
 
-    private uint m_iMaxSlot;
-    public uint MaxSlot { get { return m_iMaxSlot; } }
+    private int m_iMaxSlot;
+    public int MaxSlot { get { return m_iMaxSlot; } }
 
     //Player-related variables
     [SerializeField] private GameObject[] m_playerPrefab; //prefab
@@ -42,7 +42,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private GameObject[] m_detectors;
 
     //Gameplay variables
-    private uint currentPlayerTurn;
+    private int currentPlayerTurn;
     private bool gameWon;
     public bool GameOver { get { return gameWon; } }
 
@@ -67,10 +67,11 @@ public class BoardManager : MonoBehaviour
         for (int y = 0; y < 6; ++y) {
             for (int x = 0; x < 7; ++x) {
                 Vector3 detectorPosition = new Vector3(-2.75f + (float)x, 1.0f + (float)y, 0.0f);
-                m_detectors[index++] = GameObject.Instantiate( m_detectorTemplate, 
-                            this.gameObject.transform.position + detectorPosition,
-                            this.gameObject.transform.rotation, 
-                            this.gameObject.transform);
+                m_detectors[index] = new GameObject();
+                    m_detectors[index].transform.position = this.gameObject.transform.position + detectorPosition;
+                    m_detectors[index].transform.rotation = this.gameObject.transform.rotation;
+                    m_detectors[index].transform.parent = this.gameObject.transform;
+                index++;
             }
         }
 
@@ -82,7 +83,7 @@ public class BoardManager : MonoBehaviour
             m_vTopSlots[i] = this.gameObject.transform.position + topSlot;
         }
 
-        for (uint i = 0; i < m_players.Length; ++i) {
+        for (int i = 0; i < m_players.Length; ++i) {
             m_players[i] = GameObject.Instantiate(m_playerPrefab[i], this.gameObject.transform);
             //m_players[i].transform.parent = this.gameObject.transform;
             m_Behaviours[i] = m_players[i].GetComponent<PlayerBehaviour>();
@@ -109,10 +110,10 @@ public class BoardManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //check how to spawn stuff
     }
 
-    public void OnEndTurn(uint playerID, uint playerSlot) {
+    public void OnEndTurn(int playerID, int playerSlot) {
 
         foreach (PlayerBehaviour behaviour in m_Behaviours)
         {
@@ -120,7 +121,7 @@ public class BoardManager : MonoBehaviour
             behaviour.enabled = false;
         }
 
-        uint slot = playerSlot;
+        int slot = playerSlot;
         for (int i = (int)playerSlot; i < 42; ++i) {
             if (!m_detectors[i].GetComponent<DetectorBehaviour>().HasOwner)
             {
@@ -155,7 +156,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public Vector3 GetSlotPosition(uint slotIndex) {
+    public Vector3 GetSlotPosition(int slotIndex) {
         if (slotIndex <= m_iMaxSlot) { return m_vTopSlots[slotIndex]; }
         else {
             Debug.Log("Invalid Slot");
@@ -163,7 +164,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public bool IsSlotFull(uint slot) {
+    public bool IsSlotFull(int slot) {
 
         return m_detectors[35 + slot].GetComponent<DetectorBehaviour>().HasOwner;
     }
@@ -172,25 +173,16 @@ public class BoardManager : MonoBehaviour
         for (int p = 0; p < 2; ++p) { //for number of players
             for (int i = 0; i < 38; ++i) { //for number of relevant slots
                 if (i < 21) {
-                    if (VictoryChecker.CheckVerticalWin(p, i, m_detectors)) {
-                        return true;
-                    }
-                    
+                    if (VictoryChecker.CheckVerticalWin(p, i, m_detectors)) { return true; }
                     if (i % 7 < 4) {
-                        if (VictoryChecker.CheckUpRightWin(p, i, m_detectors)) {
-                            return true;
-                        }
+                        if (VictoryChecker.CheckUpRightWin(p, i, m_detectors)) { return true; }
                     }
                     if (i % 7 > 2) {
-                        if (VictoryChecker.CheckUpLeftWin(p, i, m_detectors)) {
-                            return true;
-                        }
+                        if (VictoryChecker.CheckUpLeftWin(p, i, m_detectors)) { return true; }
                     }
                 }
                 if (i % 7 < 4) {
-                    if(VictoryChecker.CheckHorizontalWin(p, i, m_detectors)) {
-                        return true;
-                    }
+                    if(VictoryChecker.CheckHorizontalWin(p, i, m_detectors)) { return true; }
                 }
             }
         }

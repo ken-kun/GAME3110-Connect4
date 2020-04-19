@@ -18,8 +18,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class CoinBehaviour : MonoBehaviour
 {
-    [SerializeField] private uint m_iCoinParent;
-    public uint ParentId { get { return m_iCoinParent; } }
+    [SerializeField] private int m_iCoinParent;
+    public int ParentId { get { return m_iCoinParent; } }
 
     public Rigidbody m_rb;
 
@@ -30,7 +30,7 @@ public class CoinBehaviour : MonoBehaviour
         
     }
 
-    public void SetPlayerOwner(uint playerID) {
+    public void SetPlayerOwner(int playerID) {
         m_iCoinParent = playerID;
     }
 

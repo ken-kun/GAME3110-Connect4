@@ -37,7 +37,7 @@ public class RoomManager : MonoBehaviour
     private int m_CurrentPlayerTurn; //player index
 
     //Board Attributes
-    private int[] m_slots;
+    private string[] m_slots;
 
     private void Awake()
     {
@@ -53,9 +53,9 @@ public class RoomManager : MonoBehaviour
         m_CurrentPlayerTurn = -1; //initialized to -1 for safety purposes
 
         //Board setup
-        m_slots = new int[42];
+        m_slots = new string[42];
         for (int i = 0; i < m_slots.Length; ++i) {
-            m_slots[i] = -1;
+            m_slots[i] = "";
         }
     }
     // Start is called before the first frame update
@@ -101,6 +101,6 @@ public class RoomManager : MonoBehaviour
         return -1;
     }
     public bool SlotAvailable(int slot) {
-        return m_slots[slot+35] == -1;
+        return m_slots[slot+35] == "";
     }
 }

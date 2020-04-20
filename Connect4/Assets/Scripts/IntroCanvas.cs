@@ -39,7 +39,7 @@ public class IntroCanvas : MonoBehaviour
         else if (ClientManager.Instance.ClientConnectionState == ConnectionState.FETCHING_USER && m_promptText.text != m_Messages[1]) {
             m_promptText.text = m_Messages[1];
         }
-        else if (ClientManager.Instance.ClientConnectionState == ConnectionState.ACCEPTED && m_promptText.text != m_Messages[2]) {
+        else if (ClientManager.Instance.ClientConnectionState == ConnectionState.USER_FETCHED && m_promptText.text != m_Messages[2]) {
             m_promptText.text = m_Messages[2];
         }
         else if (ClientManager.Instance.ClientConnectionState == ConnectionState.ADDING_USER && m_promptText.text != m_Messages[3]) {

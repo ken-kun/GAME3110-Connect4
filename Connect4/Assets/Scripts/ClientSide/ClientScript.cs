@@ -11,11 +11,16 @@ public class ClientScript : MonoBehaviour
 {
     public NetworkDriver m_Driver;
     public NetworkConnection m_Connection;
+    public bool IsConnected => m_Connection != default(NetworkConnection);
     public string m_ServerIP;
     public ushort m_ServerPort;
     public string m_InternalID;
-    public C4NO.NetworkPlayer m_NetPlayer;
+    public C4NO.NetworkPlayer NetPlayer;
     public bool IsTurn { get; private set; }
+    void Awake()
+    {
+        NetPlayer = new C4NO.NetworkPlayer();
+    }
 
     void Start()
     {
@@ -24,9 +29,8 @@ public class ClientScript : MonoBehaviour
         
         //empty initialization
         m_InternalID = "";
-        m_NetPlayer = default(C4NO.NetworkPlayer);
     }
-    void ConnectToServer() {
+    public void ConnectToServer() {
         var endPoint = NetworkEndPoint.Parse(m_ServerIP, m_ServerPort);
         m_Connection = m_Driver.Connect(endPoint);
     }
@@ -105,7 +109,7 @@ public class ClientScript : MonoBehaviour
             case Commands.TURN_UPDATE:
                 TurnUpdateMsg turnMsg = JsonUtility.FromJson<TurnUpdateMsg>(message);
                 //decide what to use as a base
-                IsTurn = turnMsg.playerTurn == m_NetPlayer.Username;
+                IsTurn = turnMsg.playerTurn == NetPlayer.Username;
                 //update turn accordingly
                 break;
             case Commands.GAME_SET:
@@ -117,7 +121,7 @@ public class ClientScript : MonoBehaviour
     {
         SlotRequestMsg msg = new SlotRequestMsg();
         msg.slot = slot;
-        msg.player = m_NetPlayer;
+        msg.player = NetPlayer;
         SendToServer(JsonUtility.ToJson(msg));
     }
 }

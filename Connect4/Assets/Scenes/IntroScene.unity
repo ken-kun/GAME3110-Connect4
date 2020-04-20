@@ -155,7 +155,7 @@ RectTransform:
   - {fileID: 557817978}
   - {fileID: 358193319}
   m_Father: {fileID: 378801567}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -432,8 +432,8 @@ RectTransform:
   - {fileID: 1090164034}
   - {fileID: 860791424}
   - {fileID: 1324967591}
-  - {fileID: 259383136}
   - {fileID: 899619850}
+  - {fileID: 259383136}
   - {fileID: 1951075152}
   - {fileID: 926789008}
   - {fileID: 883712048}
@@ -459,15 +459,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Messages:
-  - Awaiting Login\nInput user info and press connect
+  - Awaiting Login. Press connect when done
   - Retrieving User...
   - User retrieved successfully
   - Adding user...
-  - Successfully added user\nPress connect to join server
-  - Login info rejected\nCheck info and try again
+  - Successfully added user. Press connect to join server
+  - Login info rejected Check fields and try again
   - Connecting to Server
   - Server Connection Refused...
-  - Connected to server\nPress any key to start...
+  - Connected to server Press any key to start...
   - Disconnected from server
   m_Prompt: {fileID: 1324967590}
 --- !u!1 &448534812
@@ -937,7 +937,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 378801567}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1219,7 +1219,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 924011252}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1928391833}
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &924011252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1640,7 +1651,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 65.4}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 250, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1324967592
 MonoBehaviour:
@@ -1992,8 +2003,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1951075154}
   m_TextComponent: {fileID: 916753800}
   m_Placeholder: {fileID: 915459717}
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0

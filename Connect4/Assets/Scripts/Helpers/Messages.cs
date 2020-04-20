@@ -74,7 +74,7 @@ namespace C4M { //Connect4 Messages
     }
     [Serializable]
     public class BoardUpdateMsg : ServerMsg {
-        public int[] slots;
+        public string[] slots;
         public BoardUpdateMsg() {
             cmd |= Commands.BOARD_UPDATE;
         }
@@ -125,6 +125,7 @@ namespace C4NO { //Connect4 Network Objects
         public int MatchesWon;
         public int MatchesLost;
         public int MatchesDrawn;
+        public int TotalMatches;
 
         //Room variables
         public bool isInRoom;
@@ -139,6 +140,7 @@ namespace C4NO { //Connect4 Network Objects
             MatchesWon = 0;
             MatchesLost = 0;
             MatchesDrawn = 0;
+            TotalMatches = 0;
 
             isInRoom = false;
             playerRoom = -1;

@@ -22,11 +22,14 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
+    //Network "interface"
+    private ClientScript m_netPlayer; //will change
+
     [SerializeField] private GameObject m_coinTemplate;
     private GameObject m_coin;
-    [SerializeField] private uint m_iPlayerId;
-    [SerializeField] private uint m_iCurrentSlot;
-    public uint CurrentPlayerSlot { get { return m_iCurrentSlot; } }
+    [SerializeField] private int m_iPlayerId;
+    [SerializeField] private int m_iCurrentSlot;
+    public int CurrentPlayerSlot { get { return m_iCurrentSlot; } }
 
     private BoardManager m_boardManager;
     private bool m_bIsTurn;
@@ -38,50 +41,44 @@ public class PlayerBehaviour : MonoBehaviour
         //The board is doing this for us...
         //this.gameObject.transform.position = m_boardManager.GetSlotPosition();
         m_bIsTurn = false;
+        m_netPlayer = this.gameObject.transform.parent.gameObject.GetComponent<ClientScript>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        //CreateCoin();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (m_bIsTurn) {
-
-            //this should prevent players from stacking coins over the top of the board
-            if (Input.GetKeyDown(KeyCode.Space) && !m_boardManager.IsSlotFull(m_iCurrentSlot)) { ReleaseCoin(); }
-
-            //implemented wraparound
-            if (Input.GetKeyDown(KeyCode.RightArrow)) {
-
-                ++m_iCurrentSlot;
-                m_iCurrentSlot %= 7;
-
-                this.gameObject.transform.position = m_boardManager.GetSlotPosition(m_iCurrentSlot);
-            }
-            if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-
-                m_iCurrentSlot = m_iCurrentSlot == 0 ? 6 : --m_iCurrentSlot;
-
-                this.gameObject.transform.position = m_boardManager.GetSlotPosition(m_iCurrentSlot);
-            }
+        //m_bIsTurn = m_netPlayer.IsTurn;
+        if (!m_bIsTurn) {
+            if (m_coin) { ClearCoin(); }
+            return;
         }
-        else {
-            if (m_coin) {
-                ClearCoin();
-            }
+        //this should prevent players from stacking coins over the top of the board
+        if (Input.GetKeyDown(KeyCode.Space)){ m_netPlayer.RequestSlot(CurrentPlayerSlot); }
+
+        //implemented wraparound
+        if (Input.GetKeyDown(KeyCode.RightArrow)) {
+            ++m_iCurrentSlot;
+            m_iCurrentSlot %= 7;
+            this.gameObject.transform.position = m_boardManager.GetSlotPosition(m_iCurrentSlot);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+            m_iCurrentSlot = m_iCurrentSlot == 0 ? 6 : --m_iCurrentSlot;
+            this.gameObject.transform.position = m_boardManager.GetSlotPosition(m_iCurrentSlot);
         }
     }
 
-    public void SetPlayerSlot(uint slot) {
+    public void SetPlayerSlot(int slot) {
 
         m_iCurrentSlot = slot % 7; //wraparound
     }
 
-    public void SetPlayerId(uint id) {
+    public void SetPlayerId(int id) {
         m_iPlayerId = id;
     }
 
@@ -109,7 +106,7 @@ public class PlayerBehaviour : MonoBehaviour
         m_coin.GetComponent<SphereCollider>().enabled = false;
     }
 
-    private void ClearCoin() {
+    private void ClearCoin() { //may benefit from pooling...
         Destroy(m_coin);
     }
 }

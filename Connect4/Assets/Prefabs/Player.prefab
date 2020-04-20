@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4439061463252760221}
   - component: {fileID: 7094783367281099242}
+  - component: {fileID: 102568593889761672}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -46,3 +47,30 @@ MonoBehaviour:
   m_coinTemplate: {fileID: 0}
   m_iPlayerId: 0
   m_iCurrentSlot: 0
+--- !u!114 &102568593889761672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4439061463252760220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cfa0d39f6b5ac9409eb5a81643deb4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ServerIP: 127.0.0.1
+  m_ServerPort: 12345
+  m_InternalID: 
+  m_NetPlayer:
+    id: 
+    userID: 0
+    playerName: 
+    playerSlot: -1
+    playerLevel: 0
+    skillLv: 0
+    wins: 0
+    losses: 0
+    draws: 0
+    isInRoom: 0
+    playerRoom: -1

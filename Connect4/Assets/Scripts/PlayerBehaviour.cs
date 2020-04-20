@@ -23,7 +23,7 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
     //Network "interface"
-    private PlayerNetBehaviour m_netPlayer;
+    private ClientScript m_netPlayer;
 
     [SerializeField] private GameObject m_coinTemplate;
     private GameObject m_coin;
@@ -41,18 +41,18 @@ public class PlayerBehaviour : MonoBehaviour
         //The board is doing this for us...
         //this.gameObject.transform.position = m_boardManager.GetSlotPosition();
         m_bIsTurn = false;
+        m_netPlayer = this.gameObject.transform.parent.gameObject.GetComponent<ClientScript>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        this.gameObject.GetComponent<C4NO.NetworkPlayer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_bIsTurn = m_netPlayer.IsTurn;
+        //m_bIsTurn = m_netPlayer.IsTurn;
         if (!m_bIsTurn) {
             if (m_coin) { ClearCoin(); }
             return;

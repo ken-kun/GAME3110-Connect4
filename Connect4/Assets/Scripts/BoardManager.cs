@@ -16,8 +16,11 @@
  **************************************************************/
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
 
+[RequireComponent(typeof(ClientScript))]
 public class BoardManager : MonoBehaviour
 {
     //Top Slot Config Variables
@@ -105,6 +108,20 @@ public class BoardManager : MonoBehaviour
         //TODO: Randomize
         m_Behaviours[0].SetTurn(true);
         m_canvasManager.UpdateTurnText("Player A");
+
+        StartCoroutine(WebTest());
+    }
+
+    IEnumerator WebTest() {
+        UnityWebRequest req = UnityWebRequest.Get("https://06zywqza3m.execute-api.us-east-1.amazonaws.com/default/RetrievePlayer");
+        yield return req.SendWebRequest();
+
+        if (req.isNetworkError || req.isHttpError) {
+            Debug.Log(req.error);
+        }
+        else {
+            Debug.Log(req.downloadHandler.text);
+        }
     }
 
     // Update is called once per frame

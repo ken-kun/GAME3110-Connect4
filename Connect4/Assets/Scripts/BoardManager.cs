@@ -104,25 +104,7 @@ public class BoardManager : MonoBehaviour
         if (!m_canvasManager) {
             m_canvasManager = GameObject.Find("Canvas").GetComponent<LevelCanvasManager>();
         }
-        //TODO: Randomize
-        m_Behaviours[0].SetTurn(true);
-        m_canvasManager.UpdateTurnText("Player A");
-
-        StartCoroutine(WebTest());
     }
-
-    IEnumerator WebTest() {
-        UnityWebRequest req = UnityWebRequest.Get("https://06zywqza3m.execute-api.us-east-1.amazonaws.com/default/RetrievePlayer");
-        yield return req.SendWebRequest();
-
-        if (req.isNetworkError || req.isHttpError) {
-            Debug.Log(req.error);
-        }
-        else {
-            Debug.Log(req.downloadHandler.text);
-        }
-    }
-
     // Update is called once per frame
     void Update()
     {

@@ -43,7 +43,9 @@ public class ClientScript : MonoBehaviour
     }
     void OnConnect()
     {
-        //
+        C4M.PlayerMsg pMsg = new C4M.PlayerMsg();
+        pMsg.player = NetPlayer;
+        SendToServer(JsonUtility.ToJson(pMsg));
     }
     void OnData(DataStreamReader stream)
     {

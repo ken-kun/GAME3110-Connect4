@@ -45,7 +45,8 @@ public class ClientManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ClientConnectionState == ConnectionState.CONNECTED && SceneManager.GetActiveScene().buildIndex == 0) {
+        if (InnerClientScript.IsConnected) { ClientConnectionState = ConnectionState.CONNECTED; }
+        if (ClientConnectionState == ConnectionState.CONNECTED && SceneManager.GetActiveScene().buildIndex != 1) {
             SceneManager.LoadScene(1);
         }
     }

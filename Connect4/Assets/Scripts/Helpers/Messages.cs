@@ -1,8 +1,6 @@
 ﻿using System; //so we don't have to write System.Serializable every time
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Build;
-using UnityEditor.Build.Player;
 using UnityEngine;
 
 namespace C4M { //Connect4 Messages
@@ -13,11 +11,14 @@ namespace C4M { //Connect4 Messages
         NONE = 0,
         SERVER_UPDATE = 1,
         PLAYER_UPDATE = SERVER_UPDATE << 1,
+        //Player Add Message
+        REQUEST_ADD = PLAYER_UPDATE << 1,
+        PLAYER_ADDED = PLAYER_UPDATE << 2,
         //Room Messages: for use by the server
         //Update examples include player added or removed.
         //The broadcast enables players to get a room ID
-        ROOM_CREATED = PLAYER_UPDATE << 1, //what's the use of this, specifically?
-        ROOM_UPDATED = PLAYER_UPDATE << 2,
+        ROOM_CREATED = PLAYER_ADDED << 1, //what's the use of this, specifically?
+        ROOM_UPDATED = PLAYER_ADDED << 2,
         //Slot Management messages:
         //  player requests slot, game accepts or rejects it
         //  The game should always accept or reject a request 
@@ -95,13 +96,13 @@ namespace C4M { //Connect4 Messages
     }
     [Serializable]
     public class PlayerMsg : MsgHeader {
+        public C4NO.NetworkPlayer player;
         public PlayerMsg() {
             cmd = Commands.PLAYER_UPDATE;
         }
     }
 
     public class SlotRequestMsg : PlayerMsg {
-        public C4NO.NetworkPlayer player;
         public int slot;
         public SlotRequestMsg() {
             cmd |= Commands.SLOT_REQUESTED;

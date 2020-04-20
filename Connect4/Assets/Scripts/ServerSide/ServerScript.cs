@@ -38,7 +38,7 @@ public class ServerScript : MonoBehaviour
     [SerializeField, Tooltip("Max skill variance tolerance for players " +
                              "to join the same room")]
     private float m_tolerance; 
-    private List<RoomManager> m_Rooms;
+    private List<GameObject> m_Rooms;
 
     void Awake()
     {
@@ -52,11 +52,12 @@ public class ServerScript : MonoBehaviour
             m_Driver.Listen();
         }
         m_Connections = new NativeList<NetworkConnection>(16, Allocator.Persistent);
+        m_Rooms = new List<GameObject>();
         m_NetworkPlayers = new List<C4NO.NetworkPlayer>(16);
     }
     // Start is called before the first frame update
     void Start() {
-    
+        AddRoom();
     }
     void Update()
     {
@@ -97,8 +98,10 @@ public class ServerScript : MonoBehaviour
     }
     //Room Management Functions:
     void AddRoom() {
-        m_Rooms.Add(new RoomManager());
-        m_Rooms[m_Rooms.Count - 1].roomID = m_Rooms.Count - 1;
+        m_Rooms.Add(new GameObject());
+        m_Rooms[m_Rooms.Count - 1].transform.parent = this.gameObject.transform;
+        m_Rooms[m_Rooms.Count - 1].AddComponent<RoomManager>();
+        m_Rooms[m_Rooms.Count - 1].GetComponent<RoomManager>().roomID = m_Rooms.Count - 1;
     }
 
     bool AddPlayerToRoom(C4NO.NetworkPlayer player, RoomManager room) {
@@ -133,22 +136,7 @@ public class ServerScript : MonoBehaviour
     }
     void OnConnect(NetworkConnection c) {
         m_Connections.Add(c);
-        m_NetworkPlayers.Add(new C4NO.NetworkPlayer());
-        //REQUIRES LAMBDA: RETRIEVE PLAYER INFO
-            //DEFINE STUFF here
-        foreach (RoomManager room in m_Rooms) {
-            //Shorthand again. If the player is added to a room, the attribute changes
-            //this means that the player has a room. This is enough to break out of the loop
-            if ((m_NetworkPlayers[m_NetworkPlayers.Count-1].isInRoom = AddPlayerToRoom(m_NetworkPlayers[m_NetworkPlayers.Count - 1], room)) == true) {
-                //Create server update message
-                break;
-            }
-        }
-        if (!m_NetworkPlayers[m_NetworkPlayers.Count - 1].isInRoom) {
-            AddRoom();
-            m_NetworkPlayers[m_NetworkPlayers.Count - 1].isInRoom = AddPlayerToRoom(m_NetworkPlayers[m_NetworkPlayers.Count - 1], m_Rooms[m_Rooms.Count - 1]);
-            //create server update message
-        }
+        Debug.Log("Connection Accepted");
     }
     void OnData(DataStreamReader stream, int i) {
         NativeArray<byte> bytes = new NativeArray<byte>(stream.Length, Allocator.Temp);
@@ -168,6 +156,24 @@ public class ServerScript : MonoBehaviour
         MsgHeader header = JsonUtility.FromJson<MsgHeader>(msg);
 
         switch (header.cmd ^ Commands.PLAYER_UPDATE) {
+            case Commands.NONE: //This means that it's a simple "Player Connect" command
+                m_NetworkPlayers.Add(JsonUtility.FromJson<C4NO.NetworkPlayer>(msg));
+                foreach (GameObject room in m_Rooms) {
+                    //Shorthand again. If the player is added to a room, the attribute changes
+                    //this means that the player has a room. This is enough to break out of the loop
+                    if ((m_NetworkPlayers[m_NetworkPlayers.Count - 1].isInRoom = AddPlayerToRoom(m_NetworkPlayers[m_NetworkPlayers.Count - 1], 
+                        room.GetComponent<RoomManager>())) == true) {
+                        //Create server update message
+                        break;
+                    }
+                }
+                if (!m_NetworkPlayers[m_NetworkPlayers.Count - 1].isInRoom) {
+                    AddRoom();
+                    m_NetworkPlayers[m_NetworkPlayers.Count - 1].isInRoom = AddPlayerToRoom(m_NetworkPlayers[m_NetworkPlayers.Count - 1], 
+                        m_Rooms[m_Rooms.Count - 1].GetComponent<RoomManager>());
+                    //create server update message
+                }
+                break;
             case Commands.SLOT_REQUESTED:
 
                 break;

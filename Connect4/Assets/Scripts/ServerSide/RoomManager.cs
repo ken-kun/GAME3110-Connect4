@@ -39,10 +39,10 @@ public class RoomManager : MonoBehaviour
     //Board Attributes
     private string[] m_slots;
 
-    private void Awake()
+    void Awake()
     {
         //gets reference to server to be able to send messages
-        m_serverScript = this.gameObject.GetComponent<ServerScript>();
+        m_serverScript = this.gameObject.transform.parent.gameObject.GetComponent<ServerScript>();
 
         //sets room and players
         Capacity = 2;

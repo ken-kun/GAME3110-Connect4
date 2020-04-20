@@ -164,3 +164,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b55c0b58585852e40b93a45cfbe6aa6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ServerPort: 12345
+  m_tolerance: 1

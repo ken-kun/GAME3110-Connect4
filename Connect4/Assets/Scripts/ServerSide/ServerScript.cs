@@ -111,7 +111,7 @@ public class ServerScript : MonoBehaviour
         else if (room.HasRoom) {
             foreach (C4NO.NetworkPlayer netPlayer in m_NetworkPlayers) {
                 if (netPlayer.playerRoom == room.roomID) {
-                    if (Mathf.Abs(player.skillLv - netPlayer.skillLv) < m_tolerance) {
+                    if (Mathf.Abs(player.SkillLv - netPlayer.SkillLv) < m_tolerance) {
                         return ((player.playerRoom = room.AddPlayer(player.id)) != -1);
                     }
                 }

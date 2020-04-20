@@ -82,6 +82,8 @@ public class RoomManager : MonoBehaviour
     void UpdateTurn() {
         if (m_CurrentPlayerTurn == 0) {
             //Send Update Turn message via server
+            TurnUpdateMsg tmsg = new TurnUpdateMsg();
+            tmsg.playerTurn = m_players[1];
         }
     }
     public int AddPlayer(string player) {

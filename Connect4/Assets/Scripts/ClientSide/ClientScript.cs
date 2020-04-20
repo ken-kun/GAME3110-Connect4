@@ -19,15 +19,16 @@ public class ClientScript : MonoBehaviour
 
     void Start()
     {
-
         m_Driver = NetworkDriver.Create();
         m_Connection = default(NetworkConnection);
-        var endPoint = NetworkEndPoint.Parse(m_ServerIP, m_ServerPort);
-        m_Connection = m_Driver.Connect(endPoint);
-
+        
         //empty initialization
         m_InternalID = "";
         m_NetPlayer = default(C4NO.NetworkPlayer);
+    }
+    void ConnectToServer() {
+        var endPoint = NetworkEndPoint.Parse(m_ServerIP, m_ServerPort);
+        m_Connection = m_Driver.Connect(endPoint);
     }
     void SendToServer(string message)
     {
@@ -104,7 +105,7 @@ public class ClientScript : MonoBehaviour
             case Commands.TURN_UPDATE:
                 TurnUpdateMsg turnMsg = JsonUtility.FromJson<TurnUpdateMsg>(message);
                 //decide what to use as a base
-                IsTurn = turnMsg.playerTurn == m_NetPlayer.playerName;
+                IsTurn = turnMsg.playerTurn == m_NetPlayer.Username;
                 //update turn accordingly
                 break;
             case Commands.GAME_SET:

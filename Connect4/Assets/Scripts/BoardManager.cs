@@ -20,7 +20,6 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
-[RequireComponent(typeof(ClientScript))]
 public class BoardManager : MonoBehaviour
 {
     //Top Slot Config Variables

@@ -23,7 +23,7 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
     //Network "interface"
-    private ClientScript m_netPlayer;
+    private ClientScript m_netPlayer; //will change
 
     [SerializeField] private GameObject m_coinTemplate;
     private GameObject m_coin;

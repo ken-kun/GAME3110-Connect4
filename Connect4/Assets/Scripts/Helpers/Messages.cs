@@ -43,7 +43,7 @@ namespace C4M { //Connect4 Messages
     [Serializable]
     public class RoomCreatedMsg : ServerMsg {
         public int roomID;
-        RoomCreatedMsg() {
+        public RoomCreatedMsg() {
             cmd |= Commands.ROOM_CREATED;
         }
     }
@@ -53,7 +53,7 @@ namespace C4M { //Connect4 Messages
         public int capacity;
         public int occupancy;
         public C4NO.NetworkPlayer[] players;
-        RoomUpdatedMsg()
+        public RoomUpdatedMsg()
         {
             cmd |= Commands.ROOM_UPDATED;
             players = new C4NO.NetworkPlayer[2];
@@ -61,13 +61,13 @@ namespace C4M { //Connect4 Messages
     }
     [Serializable]
     public class SlotAcceptedMsg : ServerMsg {
-        SlotAcceptedMsg() {
+        public SlotAcceptedMsg() {
             cmd |= Commands.SLOT_ACCEPTED;
         }
     }
     [Serializable]
     public class SlotRejectedMsg : ServerMsg {
-        SlotRejectedMsg()
+        public SlotRejectedMsg()
         {
             cmd |= Commands.SLOT_REJECTED;
         }
@@ -75,7 +75,7 @@ namespace C4M { //Connect4 Messages
     [Serializable]
     public class BoardUpdateMsg : ServerMsg {
         public int[] slots;
-        BoardUpdateMsg() {
+        public BoardUpdateMsg() {
             cmd |= Commands.BOARD_UPDATE;
         }
     }
@@ -83,13 +83,13 @@ namespace C4M { //Connect4 Messages
     public class TurnUpdateMsg : ServerMsg {
         //Basically, tells whose turn it is
         public string playerTurn;
-        TurnUpdateMsg() {
+        public TurnUpdateMsg() {
             cmd |= Commands.TURN_UPDATE;
         }
     }
     public class GameSetMsg : ServerMsg {
         public string winner;
-        GameSetMsg() {
+        public GameSetMsg() {
             cmd |= Commands.GAME_SET;
         }
     }
@@ -118,13 +118,13 @@ namespace C4NO { //Connect4 Network Objects
     [Serializable] public class NetworkPlayer : NetworkObjects {
         //Database variables
         public int userID;
-        public string playerName;
+        public string Username;
         public int playerSlot;
-        public int playerLevel;
-        public float skillLv;
-        public int wins;
-        public int losses;
-        public int draws;
+        public int PlayerLevel;
+        public float SkillLv;
+        public int MatchesWon;
+        public int MatchesLost;
+        public int MatchesDrawn;
 
         //Room variables
         public bool isInRoom;
@@ -132,16 +132,21 @@ namespace C4NO { //Connect4 Network Objects
 
         public NetworkPlayer() {
             userID = 0;
-            playerName = "";
+            Username = "";
             playerSlot = -1;
-            playerLevel = 0;
-            skillLv = 0;
-            wins = 0;
-            losses = 0;
-            draws = 0;
+            PlayerLevel = 0;
+            SkillLv = 0;
+            MatchesWon = 0;
+            MatchesLost = 0;
+            MatchesDrawn = 0;
 
             isInRoom = false;
             playerRoom = -1;
         }
+    }
+    [Serializable]
+    public class PlayerLoginInfo {
+        public string Username;
+        public string Password;
     }
 }

@@ -18,6 +18,8 @@ public enum ConnectionState {AWAITING,
                              REFUSED, 
                              CONNECTED,
                              DISCONNECTED,
+                             AWAITING_P2,
+                             PLAYING,
                              CONNECTION_COUNT }
 public class ClientManager : MonoBehaviour
 { 
@@ -47,8 +49,23 @@ public class ClientManager : MonoBehaviour
     {
         if (InnerClientScript.IsConnected) { ClientConnectionState = ConnectionState.CONNECTED; }
         if (ClientConnectionState == ConnectionState.CONNECTED && SceneManager.GetActiveScene().buildIndex != 1) {
-            SceneManager.LoadScene(1);
+            //SceneManager.LoadScene(1);
+            if (Input.GetKeyDown(KeyCode.Space)) { SceneManager.LoadScene(1); }
         }
+        if (SceneManager.GetActiveScene().buildIndex == 1) {
+            if ((InnerClientScript.players[0] == "" || InnerClientScript.players[1] == "") && ClientConnectionState != ConnectionState.AWAITING_P2)
+            {
+                ClientConnectionState = ConnectionState.AWAITING_P2;
+            }
+            else if ((InnerClientScript.players[0] != "" && InnerClientScript.players[1] != "") && ClientConnectionState != ConnectionState.PLAYING)
+            {
+                ClientConnectionState = ConnectionState.PLAYING;
+            }
+            if (ClientConnectionState == ConnectionState.PLAYING) {
+                //Game Proper
+            }
+        }
+
     }
     public void FetchUser() {
         if (ClientConnectionState == ConnectionState.AWAITING   || 
@@ -65,7 +82,6 @@ public class ClientManager : MonoBehaviour
         
         //converts data to Json, and then to byte array
         string classData = JsonUtility.ToJson(data);
-        Debug.Log(classData);
         UTF8Encoding temp = new UTF8Encoding();
         byte[] bytes = temp.GetBytes(classData);
         
@@ -86,9 +102,9 @@ public class ClientManager : MonoBehaviour
             string result = "";
             if (req.isDone) {
                 result = req.downloadHandler.text;
-                Debug.Log(result);
-                if (result == "Wrong Password") {
+                if (result == "Wrong Password" || !result.Contains("Username")) {
                     ClientConnectionState = ConnectionState.REJECTED;
+                    StopCoroutine(RetrieveUser());
                 }
                 else {
                     InnerClientScript.NetPlayer = JsonUtility.FromJson<C4NO.NetworkPlayer>(result);

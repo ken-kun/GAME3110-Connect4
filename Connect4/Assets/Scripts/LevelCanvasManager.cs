@@ -19,27 +19,31 @@ public class LevelCanvasManager : MonoBehaviour
 {
     private Canvas m_canvas;
 
+    [SerializeField] private Text m_waitingText;
     [SerializeField] private Text m_turnText;
     [SerializeField] private Text m_gameSetText;
 
     void Awake() {
         m_canvas = this.gameObject.GetComponent<Canvas>();
+        m_waitingText.gameObject.SetActive(false);
         m_turnText.gameObject.SetActive(true);
         m_gameSetText.gameObject.SetActive(false);
     }
-
     // Start is called before the first frame update
     void Start()
     {
 
     }
-
     // Update is called once per frame
     void Update()
     {
-        
+        if (ClientManager.Instance.ClientConnectionState == ConnectionState.AWAITING_P2) {
+                m_waitingText.gameObject.SetActive(true);
+        }
+        if (ClientManager.Instance.ClientConnectionState != ConnectionState.AWAITING_P2) {
+                m_waitingText.gameObject.SetActive(false);
+        }
     }
-
     public void UpdateTurnText(string player) {
         m_turnText.text = player + "'s turn";
     }

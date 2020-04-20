@@ -40,7 +40,15 @@ namespace C4M { //Connect4 Messages
             cmd = Commands.SERVER_UPDATE;
         }
     }
+    [Serializable]
+    public class PlayerAddedMsg : ServerMsg {
+        public string [] Players;
+        public PlayerAddedMsg() {
+            Players = new string[2];
+            cmd |= Commands.PLAYER_ADDED;
 
+        }
+    }
     [Serializable]
     public class RoomCreatedMsg : ServerMsg {
         public int roomID;
@@ -88,6 +96,7 @@ namespace C4M { //Connect4 Messages
             cmd |= Commands.TURN_UPDATE;
         }
     }
+    [Serializable]
     public class GameSetMsg : ServerMsg {
         public string winner;
         public GameSetMsg() {
@@ -101,7 +110,7 @@ namespace C4M { //Connect4 Messages
             cmd = Commands.PLAYER_UPDATE;
         }
     }
-
+    [Serializable]
     public class SlotRequestMsg : PlayerMsg {
         public int slot;
         public SlotRequestMsg() {

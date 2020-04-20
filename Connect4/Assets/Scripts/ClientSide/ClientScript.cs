@@ -16,9 +16,11 @@ public class ClientScript : MonoBehaviour
     public ushort m_ServerPort;
     public string m_InternalID;
     public C4NO.NetworkPlayer NetPlayer;
+    public string[] players;
     public bool IsTurn { get; private set; }
     void Awake()
     {
+        players = new string[2];
         NetPlayer = new C4NO.NetworkPlayer();
     }
 
@@ -76,10 +78,7 @@ public class ClientScript : MonoBehaviour
     {
         m_Driver.ScheduleUpdate().Complete();
 
-        if (!m_Connection.IsCreated)
-        {
-            return;
-        }
+        if (!m_Connection.IsCreated) { return; }
 
         DataStreamReader stream;
         NetworkEvent.Type cmd;
@@ -92,15 +91,20 @@ public class ClientScript : MonoBehaviour
 
             cmd = m_Connection.PopEvent(m_Driver, out stream);
         }
-
     }
     void ProcessServerMessage(string message)
     {
         MsgHeader header = JsonUtility.FromJson<MsgHeader>(message);
         switch (header.cmd ^ Commands.SERVER_UPDATE)
         {
+            case Commands.PLAYER_ADDED:
+                //Handle player added
+                break;
             case Commands.ROOM_UPDATED:
                 //Process room from added player
+                break;
+            case Commands.SLOT_ACCEPTED:
+                //Drop coin
                 break;
             case Commands.SLOT_REJECTED:
                 //Continue playing

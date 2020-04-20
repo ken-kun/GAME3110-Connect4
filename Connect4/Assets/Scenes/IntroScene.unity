@@ -467,7 +467,7 @@ MonoBehaviour:
   - Login info rejected Check fields and try again
   - Connecting to Server
   - Server Connection Refused...
-  - Connected to server Press any key to start...
+  - Connected to server Press spacebar to start...
   - Disconnected from server
   m_Prompt: {fileID: 1324967590}
 --- !u!1 &448534812
@@ -1908,7 +1908,7 @@ MonoBehaviour:
   m_ServerIP: 127.0.0.1
   m_ServerPort: 12345
   m_InternalID: 
-  m_NetPlayer:
+  NetPlayer:
     id: 
     userID: 0
     Username: 
@@ -1918,8 +1918,10 @@ MonoBehaviour:
     MatchesWon: 0
     MatchesLost: 0
     MatchesDrawn: 0
+    TotalMatches: 0
     isInRoom: 0
     playerRoom: -1
+  players: []
 --- !u!1 &1951075151
 GameObject:
   m_ObjectHideFlags: 0

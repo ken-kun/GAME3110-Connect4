@@ -78,12 +78,16 @@ public class RoomManager : MonoBehaviour
     }
     void UpdateBoard() {
         //for now, just sends the board's current state via server
+        BoardUpdateMsg bmsg = new BoardUpdateMsg();
+        bmsg.slots = m_slots;
+        m_serverScript.SendBoardUpdate(bmsg, this);
     }
     void UpdateTurn() {
         if (m_CurrentPlayerTurn == 0) {
             //Send Update Turn message via server
             TurnUpdateMsg tmsg = new TurnUpdateMsg();
             tmsg.playerTurn = m_players[1];
+            m_serverScript.SendTurnUpdate(tmsg, this);
         }
     }
     public int AddPlayer(string player) {

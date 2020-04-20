@@ -103,7 +103,6 @@ public class ServerScript : MonoBehaviour
         m_Rooms[m_Rooms.Count - 1].AddComponent<RoomManager>();
         m_Rooms[m_Rooms.Count - 1].GetComponent<RoomManager>().roomID = m_Rooms.Count - 1;
     }
-
     bool AddPlayerToRoom(C4NO.NetworkPlayer player, RoomManager room) {
 
         if (room.IsEmpty) {
@@ -175,12 +174,37 @@ public class ServerScript : MonoBehaviour
                 }
                 break;
             case Commands.SLOT_REQUESTED:
-
+                SlotRequestMsg slotMsg = JsonUtility.FromJson<SlotRequestMsg>(msg);
+                ProcessSlotRequest(slotMsg);
                 break;
         }
     }
+    public void SendBoardUpdate(BoardUpdateMsg msg, RoomManager room) {
+        foreach (C4NO.NetworkPlayer player in m_NetworkPlayers) {
+            if (player.playerRoom == room.roomID) {
+                SendToClient(JsonUtility.ToJson(msg), m_Connections[player.userID]);
+            }
+        }
+    }
+    public void SendTurnUpdate(TurnUpdateMsg msg, RoomManager room) {
+        foreach (C4NO.NetworkPlayer player in m_NetworkPlayers)
+        {
+            if (player.playerRoom == room.roomID)
+            {
+                SendToClient(JsonUtility.ToJson(msg), m_Connections[player.userID]);
+            }
+        }
+    }
     void ProcessSlotRequest(SlotRequestMsg msg) {
-        
+        if (m_Rooms[msg.player.playerRoom].GetComponent<RoomManager>().SlotAvailable(msg.slot))
+        {
+            SlotAcceptedMsg samsg = new SlotAcceptedMsg();
+            SendToClient(JsonUtility.ToJson(samsg), m_Connections[msg.player.userID]);
+        }
+        else {
+            SlotRejectedMsg srmsg = new SlotRejectedMsg();
+            SendToClient(JsonUtility.ToJson(srmsg), m_Connections[msg.player.userID]);
+        }
     }
     void ProcessDisconnect(int i) {
         //cleanup

@@ -32,7 +32,11 @@ public class IntroCanvas : MonoBehaviour
      // 7 REFUSED, 
      // 8 CONNECTED,
      // 9 DISCONNECTED,
-     //10 CONNECTION_COUNT
+     /////////////////////////
+     //other player states below
+     //10 AWAITING_P2,
+     //11 PLAYING,
+     //12 CONNECTION_COUNT
         if (ClientManager.Instance.ClientConnectionState == ConnectionState.AWAITING && m_promptText.text != m_Messages[0]) {
             m_promptText.text = m_Messages[0];
         }
